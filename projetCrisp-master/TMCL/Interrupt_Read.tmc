@@ -1,0 +1,32 @@
+//This programs demonstrates how to the interupt on an input
+//change. The behaviour of this program is the same as EX0008.
+//Depending on the status of Port IN_0 is motor 0 turning
+//right (IN_0 = 0) or turning left (IN_0 = 1).
+//For more details look at TMCL_reference.pdf -
+//http://www.trinamic.com/software-tools/tmcl-ide
+//
+//Before use: Restore Factory Defaults
+//(MN 19.05.2015)
+
+
+// *** Interrupt initialization *** //
+VECT 39, changeOUTPUT 	//define the interrupt vector for input change 0 interrupt (IN_0)
+SGP 39, 3, 3 				//configure interrupt to trigger on both edge of input 0 (0=off,1=low-high,2=high-low,3=both)
+EI 39 						//enable input change 0 interrupt (IN_0)
+EI 255 						//globally switch on interrupt processing
+
+// *** Main Loop *** //
+loop:						//infinite loop
+	JA loop					//jump to loop
+
+changeOUTPUT:
+	GIO 0, 0    				//read IN_0
+	COMP 0					//compare with 0
+	JC EQ, rechangeOUTPUT		//if equal jump to turn right
+	SIO 0, 2, 0    			//change OUT_0
+	RETI						//end of interrupt
+rechangeOUTPUT:
+	SIO 0, 2, 1    			//change OUT_0
+	RETI						//end of 
+
+
