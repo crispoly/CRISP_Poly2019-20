@@ -1,0 +1,57 @@
+
+SAP 31, 0, 0    //set reinit bldc regulation
+WAIT TICKS, 0, 50
+SAP 159, 0, 7    //set commutation mode
+SAP 134, 0, 2    //set current regulation loop delay [50us]
+SAP 133, 0, 1    //set velocity regulation loop delay [50us]
+
+//=== motor/module settings ===
+SAP 253, 0, 24	// motor poles
+SAP 6, 0, 4000 	// max current
+SAP 177, 0, 4000 // start current
+SAP 25, 0, 5230    //set thermal winding time constant [ms]
+
+//=== encoder/initialization settings ===
+SAP 250, 0, 25600 	// encoder steps
+SAP 251, 0, 0 		// encoder direction
+SAP 249, 0, 1  		// init encoder mode
+SAP 244, 0, 1000       //set init sine delay [ms]
+SAP 241, 0, 100		// init encoder speed
+SAP 165, 0, 0    		//set encoder offset
+
+SAP 252, 0, 0    //set hall interpolation
+SAP 254, 0, 0 	// hall sensor invert
+
+//=== motion settings ===
+
+SAP 9, 0, 5      //set motor halted velocity [rpm]
+SAP 4, 0, 100 	// max ramp velocity
+SAP 11, 0, 500  // acceleration
+SAP 146, 0,0 	// enable velocity ramp
+SAP 7, 0, 500 	// target reached velocity
+SAP 10, 0, 5 	// target reached distance
+
+
+//=== current PID values ===
+SAP 172, 0, 550 	// P
+SAP 173, 0, 200 	// I
+
+//=== velocity PID values ===
+SAP 234, 0, 5000	// P
+SAP 235, 0, 100	// I
+
+//=== position PID values ===
+SAP 230, 0, 10 	// P
+
+SAP 164, 0, 3    //set activate stop switch
+
+//SGP 77, 0, 1     // start tmcl application after power up
+
+
+SAP 1, 0, 0    //set actual position
+//SAP 163, 0, 0    //set clear once
+
+
+		
+STOP		// end of this script
+

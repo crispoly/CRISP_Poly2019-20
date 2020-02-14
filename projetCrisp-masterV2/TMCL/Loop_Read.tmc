@@ -1,0 +1,17 @@
+loop:
+	SIO 0,2,1
+	CSUB ifStatement	
+	JA loop				//jump to loop
+ 
+// *** begin (if-else-statement) *** //
+ifStatement:
+	GIO 0, 0			//check state of IN_0
+	JC ZE, Out0Off		//if IN_0 = high, jump to Out0Off else continue
+	GIO 1, 0			//check state of IN_1
+	JC ZE, Out0Off		//if IN_1 = high, jump to Out0Off else continue
+	RSUB 				//end of subroutine
+Out0Off:
+	SIO 0, 2, 0    //change OUT_
+	RSUB 				//end of subroutine
+// *** end (if-eslse-statement) *** //
+

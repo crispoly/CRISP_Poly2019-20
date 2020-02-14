@@ -1,0 +1,57 @@
+//STAP 31, 0      //set reinit bldc regulation
+WAIT TICKS, 0, 50
+STAP 159, 0     //set commutation mode
+STAP 134, 0     //set current regulation loop delay [50us]
+STAP 133, 0     //set velocity regulation loop delay [50us]
+
+//=== motor/module settings ===
+STAP 253, 0	     // motor poles
+STAP 6, 0 	     // max current
+STAP 177, 0     // start current
+STAP 25, 0      //set thermal winding time constant [ms]
+
+//=== encoder/initialization settings ===
+STAP 250, 0 	// encoder steps
+STAP 251, 0		// encoder direction
+STAP 249, 0		// init encoder mode
+STAP 244, 0      //set init sine delay [ms]
+STAP 241, 0 	// init encoder speed
+STAP 165, 0		//set encoder offset
+
+STAP 252, 0      //set hall interpolation
+STAP 254, 0 	// hall sensor invert
+
+//=== motion settings ===
+
+STAP 9, 0        //set motor halted velocity [rpm]
+STAP 4, 0        // max ramp velocity
+STAP 11, 0       // acceleration
+STAP 146, 0      // enable velocity ramp
+STAP 7, 0        // target reached velocity
+STAP 10, 0       // target reached distance
+
+
+//=== current PID values ===
+STAP 172, 0  	// P
+STAP 173, 0  	// I
+
+//=== velocity PID values ===
+STAP 234, 0 	// P
+STAP 235, 0      // I
+
+//=== position PID values ===
+STAP 230, 0 	// P
+
+STAP 164, 0      //set activate stop switch
+
+//SGP 77, 0, 1     // start tmcl application after power up
+
+
+// STAP 1, 0    //set actual position
+//STAP 163, 0, 0    //set clear once
+
+
+		
+STOP		// end of this script
+
+
