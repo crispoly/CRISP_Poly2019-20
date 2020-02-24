@@ -1,0 +1,178 @@
+SAP 31, 0, 0    //set reinit bldc regulation
+SAP 1, 0, 0    //set actual position
+SAP 0, 0, 0    //set target position
+
+WAIT TICKS, 0, 50
+SAP 159, 0, 7    //set commutation mode
+SAP 134, 0, 2    //set current regulation loop delay [50us]
+SAP 133, 0, 1    //set velocity regulation loop delay [50us]
+
+//=== motor/module settings ===
+SAP 253, 0, 24	// motor poles
+SAP 6, 0, 5000 	// max current
+SAP 177, 0, 4000 // start current
+SAP 25, 0, 5230    //set thermal winding time constant [ms]
+
+//=== encoder/initialization settings ===
+SAP 250, 0, 25600 	// encoder steps
+SAP 251, 0, 0 		// encoder direction
+SAP 249, 0, 1  		// init encoder mode
+SAP 244, 0, 1000       //set init sine delay [ms]
+SAP 241, 0, 100		// init encoder speed
+SAP 165, 0, 0    		//set encoder offset
+
+SAP 252, 0, 0    //set hall interpolation
+SAP 254, 0, 0 	// hall sensor invert
+
+//=== motion settings ===
+
+SAP 9, 0, 5      //set motor halted velocity [rpm]
+SAP 4, 0, 500 	// max ramp velocity
+SAP 11, 0, 500  // acceleration
+SAP 146, 0,0 	// enable velocity ramp
+SAP 7, 0, 500 	// target reached velocity
+SAP 10, 0, 5 	// target reached distance
+
+
+//=== current PID values ===
+SAP 172, 0, 550 	// P
+SAP 173, 0, 200 	// I
+
+//=== velocity PID values ===
+SAP 234, 0, 5000	// P
+SAP 235, 0, 100	// I
+
+//=== position PID values ===
+SAP 230, 0, 15 	// P
+
+SAP 164, 0, 3    //set activate stop switch
+
+//SGP 77, 0, 1     // start tmcl application after power up
+
+
+SAP 1, 0, 0    //set actual position
+SAP 0, 0, 0    //set target position
+//SAP 163, 0, 0    //set clear once
+
+
+//STAP 31, 0    //set reinit bldc regulation
+
+WAIT TICKS, 0, 50
+STAP 159, 0     //set commutation mode
+STAP 134, 0     //set current regulation loop delay [50us]
+STAP 133, 0     //set velocity regulation loop delay [50us]
+
+//=== motor/module settings ===
+STAP 253, 0	// motor poles
+STAP 6, 0       // max current
+STAP 177, 0     // start current
+STAP 25, 0      //set thermal winding time constant [ms]
+
+//=== encoder/initialization settings ===
+STAP 250, 0 	// encoder steps
+STAP 251, 0     // encoder direction
+STAP 249, 0	// init encoder mode
+STAP 244, 0     //set init sine delay [ms]
+STAP 241, 0 	// init encoder speed
+STAP 165, 0		//set encoder offset
+
+STAP 252, 0      //set hall interpolation
+STAP 254, 0 	// hall sensor invert
+
+//=== motion settings ===
+
+STAP 9, 0        //set motor halted velocity [rpm]
+STAP 4, 0        // max ramp velocity
+STAP 11, 0       // acceleration
+STAP 146, 0      // enable velocity ramp
+STAP 7, 0        // target reached velocity
+STAP 10, 0       // target reached distance
+
+
+//=== current PID values ===
+STAP 172, 0  	// P
+STAP 173, 0  	// I
+
+//=== velocity PID values ===
+STAP 234, 0 	// P
+STAP 235, 0      // I
+
+//=== position PID values ===
+STAP 230, 0 	// P
+
+STAP 164, 0      //set activate stop switch
+
+
+WAIT TICKS, 0, 50
+
+// Initialisation of main program
+SGP 0, 2, 0   // Set position input to 0 (set Value #0 to 0)
+SGP 1, 2, 0   // Skip calibration (set Value #1 to 0: false) 0 if false, 10 if true
+SGP 2, 2, 0   // Start calibration (set Value #2 to 0: false) 0 if false, 10 if true
+
+
+//wait for instruction of calibration start
+waitCalibration:
+    GGP 1, 2   // Check value #1 skip calibration if true (10)
+    COMP 10
+    JC EQ, main
+    GGP 2, 2   // Check value #2 start calibration if true (10)
+    COMP 10
+    JC NE, waitCalibration
+    SGP 2, 2, 0   // Do not start calibration (set Value #2 to 0) 0 if false, 10 if true
+    ROR 0, 200   // Avoid stacking of rotation command
+Calibration:
+    GIO 0, 0    //read IN_0
+    COMP 1
+    JC EQ, Calibration
+    ROR 0, 0   // Avoid stacking of rotation command
+    WAIT TICKS, 0, 200
+    ROR 0, -200       // Avoid stacking of rotation command
+    WAIT TICKS, 0, 200
+    ROR 0, 100         // Avoid stacking of rotation command
+PreciseCalib:
+    GIO 0, 0    //read IN_0
+    COMP 1
+    JC EQ, PreciseCalib
+    ROR 0, 0
+
+    SAP 0, 0, 0    //set target position
+    SGP 0, 2, 0    //set target position
+
+main: //main
+    GGP 0, 2    //Get user value #0 to register
+    // To do :  Check if bounderies ok, if ok by pass limit switch to engage
+CheckIt:
+    CSUB CheckLimitSwitch
+    JA UpdateTargetPos
+RestoreLoop:
+    JA main				//jump to main
+
+UpdateTargetPos: 
+    GGP 0, 2 
+    AAP 0, 0
+    JA RestoreLoop
+
+CheckLimitSwitch:
+     GIO 0, 0    //read IN_0
+     COMP 0
+     JC EQ, DisengagePLUS
+     GIO 1, 0    //read IN_1
+     COMP 0
+     JC EQ, DisengageMINUS
+     RSUB	
+
+DisengagePLUS:       
+   SAP 1, 0, 0    //set actual position
+   SAP 0, 0, 0    //set target position
+   SGP 0, 2, 0    //set target position
+   RSUB
+
+
+DisengageMINUS:       
+   SAP 1, 0, 100    //set actual position
+   SAP 0, 0, 100    //set target position
+   SGP 0, 2, 100    //set target position
+   RSUB
+
+   STOP
