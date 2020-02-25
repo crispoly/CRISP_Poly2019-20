@@ -1,7 +1,17 @@
 SAP 31, 0, 0    //set reinit bldc regulation
-SAP 1, 0, 0     //set actual position
-SAP 0, 0, 0     //set target position
+SAP 1, 0, 0              //set actual position
+SAP 0, 0, 0              //set target position
+SGP 0, 2, 0              // Set position input to 0 (set Value #0 to 0)
+SGP 1, 2, 0              // Skip calibration (set Value #1 to 0: false) 0 if false, 10 if true
+SGP 2, 2, 0              // Start calibration (set Value #2 to 0: false) 0 if false, 10 if true
+JA BeginSettingParameters
 
+SAP 1, 0, 0               //set actual position
+SAP 0, 0, 0               //set target position
+SGP 0, 2, 0              // Set position input to 0 (set Value #0 to 0)
+JA main
+
+BeginSettingParameters:
 WAIT TICKS, 0, 50
 SAP 159, 0, 7    //set commutation mode
 SAP 134, 0, 2    //set current regulation loop delay [50us]
@@ -46,13 +56,6 @@ SAP 235, 0, 100	  // I
 SAP 230, 0, 15 	// P
 
 SAP 164, 0, 3   //set activate stop switch
-
-//SGP 77, 0, 1  // start tmcl application after power up
-
-
-SAP 1, 0, 0     //set actual position
-SAP 0, 0, 0     //set target position
-//SAP 163, 0, 0 //set clear once
 
 
 //STAP 31, 0    //set reinit bldc regulation
@@ -106,13 +109,10 @@ STAP 164, 0      //set activate stop switch
 WAIT TICKS, 0, 50
 
 // Initialisation of main program
-SGP 0, 2, 0              // Set position input to 0 (set Value #0 to 0)
-SGP 1, 2, 0              // Skip calibration (set Value #1 to 0: false) 0 if false, 10 if true
-SGP 2, 2, 0              // Start calibration (set Value #2 to 0: false) 0 if false, 10 if true
-
 
 //wait for instruction of calibration start
 waitCalibration:
+    SAP 1, 0, 0              //set actual position
     GGP 1, 2             // Check value #1 skip calibration if true (10)
     COMP 10
     JC EQ, main
@@ -135,8 +135,13 @@ PreciseCalib:
     COMP 1
     JC EQ, PreciseCalib
     ROR 0, 0
+    // to do : save current position (change to real value)
+    SAP 1, 0, 100       //set actual position
+    SAP 0, 0, 100       //set target position
+    WAIT TICKS, 0, 200
     SAP 0, 0, 0          //set target position (move back to initial position)
     SGP 0, 2, 0          //set target position
+
 
 main: //main
     GGP 0, 2             //Get user value #0 to register

@@ -59,13 +59,11 @@ while true
 % tic;
 for i = 1:n
     field = fields(i);
-    
-%     print_memmapfile(m, ['pos_1']);
-    %Send command
     command_dg = read_dg(m, field, 1);
     if command_dg(2) == 132 %Enter Download Mode
         DownloadMode = 1;
     end
+    %Send command
     if ~isequal(command_dg, empty)
         s = field{1};
         if (DownloadMode == 0) || strcmp(s,'free')
