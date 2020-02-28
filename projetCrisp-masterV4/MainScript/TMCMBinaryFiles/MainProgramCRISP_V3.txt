@@ -1,0 +1,396 @@
+SAP 31, 0, 0             //set reinit bldc regulation
+SAP 1, 0, 0              //set actual position
+SAP 0, 0, 0              //set target position
+SGP 0, 2, 0              // Set position input to 0 (set Value #0 to 0)
+SGP 1, 2, 0              // Skip calibration (set Value #1 to 0: false) 0 if false, 10 if true
+SGP 2, 2, 0              // Start calibration (set Value #2 to 0: false) 0 if false, 10 if true
+JA BeginSettingParameters
+
+// Set actual position to 0 : always skip if memory not read at 7th space
+SAP 1, 0, 0               //set actual position
+SAP 0, 0, 0               //set target position
+SGP 0, 2, 0              // Set position input to 0 (set Value #0 to 0)
+JA main
+
+//Reset of Trajectory mode always skip if memory not read at 11th space
+SGP 3, 2, 10              // Trajectory mode activated (set Value #3 to 0: false) 0 if false, 10 if true
+SGP 5, 2, 0              // Current position in trajectory reading  (value #5)
+SGP 6, 2, 10             // Sould you go to next position?  (set Value #2 to 10: true) 0 if false, 10 if true
+JA main
+
+BeginSettingParameters:
+WAIT TICKS, 0, 50
+// Trajectory parameters Initialisation
+SGP 3, 2, 0              // Trajectory mode activated (set Value #3 to 0: false) 0 if false, 10 if true
+SGP 4, 2, 0              // Number of positions saved in trajectory (value #4)
+SGP 5, 2, 0              // Current position in trajectory reading  (value #5)
+SGP 6, 2, 10             // Sould you go to next position?  (set Value #2 to 10: true) 0 if false, 10 if true
+SGP 7, 2, 0              // Time between positions in ms (values #7)
+SGP 8, 2, 0              // Looping mode activated (set Value #8 to 0: false) 0 if false, 10 if true
+SGP 9, 2, 0              // Trajectory positions #1 to 20 set to 0 (values #9 to #28)
+SGP 10, 2, 0      
+SGP 11, 2, 0   
+SGP 12, 2, 0      
+SGP 13, 2, 0      
+SGP 14, 2, 0  
+SGP 15, 2, 0      
+SGP 16, 2, 0      
+SGP 17, 2, 0   
+SGP 18, 2, 0      
+SGP 19, 2, 0      
+SGP 20, 2, 0   
+SGP 21, 2, 0      
+SGP 22, 2, 0      
+SGP 23, 2, 0    
+SGP 24, 2, 0        
+SGP 25, 2, 0
+SGP 26, 2, 0
+SGP 27, 2, 0
+SGP 28, 2, 0
+
+// Parameter initialisation
+SAP 159, 0, 7    //set commutation mode
+SAP 134, 0, 2    //set current regulation loop delay [50us]
+SAP 133, 0, 1    //set velocity regulation loop delay [50us]
+
+//=== motor/module settings ===
+SAP 253, 0, 24	 // motor poles
+SAP 6, 0, 5000 	 // max current
+SAP 177, 0, 4000 // start current
+SAP 25, 0, 5230  //set thermal winding time constant [ms]
+
+//=== encoder/initialization settings ===
+SAP 250, 0, 25600// encoder steps
+SAP 251, 0, 0 	 // encoder direction
+SAP 249, 0, 1  	 // init encoder mode
+SAP 244, 0, 1000 //set init sine delay [ms]
+SAP 241, 0, 100	 // init encoder speed
+SAP 165, 0, 0    //set encoder offset
+
+SAP 252, 0, 0    //set hall interpolation
+SAP 254, 0, 0 	 // hall sensor invert
+
+//=== motion settings ===
+
+SAP 9, 0, 5      //set motor halted velocity [rpm]
+SAP 4, 0, 500 	 // max ramp velocity
+SAP 11, 0, 500   // acceleration
+SAP 146, 0,0 	 // enable velocity ramp
+SAP 7, 0, 500  	 // target reached velocity
+SAP 10, 0, 5 	 // target reached distance
+
+
+//=== current PID values ===
+SAP 172, 0, 550   // P
+SAP 173, 0, 200   // I
+
+//=== velocity PID values ===
+SAP 234, 0, 5000  // P
+SAP 235, 0, 100	  // I
+
+//=== position PID values ===
+SAP 230, 0, 15 	// P
+
+SAP 164, 0, 3   //set activate stop switch
+
+WAIT TICKS, 0, 50
+STAP 159, 0     //set commutation mode
+STAP 134, 0     //set current regulation loop delay [50us]
+STAP 133, 0     //set velocity regulation loop delay [50us]
+
+//=== motor/module settings ===
+STAP 253, 0  	// motor poles
+STAP 6, 0       // max current
+STAP 177, 0     // start current
+STAP 25, 0      //set thermal winding time constant [ms]
+
+//=== encoder/initialization settings ===
+STAP 250, 0 	// encoder steps
+STAP 251, 0     // encoder direction
+STAP 249, 0	    // init encoder mode
+STAP 244, 0     //set init sine delay [ms]
+STAP 241, 0 	// init encoder speed
+STAP 165, 0		//set encoder offset
+
+STAP 252, 0     //set hall interpolation
+STAP 254, 0 	// hall sensor invert
+
+//=== motion settings ===
+
+STAP 9, 0        //set motor halted velocity [rpm]
+STAP 4, 0        // max ramp velocity
+STAP 11, 0       // acceleration
+STAP 146, 0      // enable velocity ramp
+STAP 7, 0        // target reached velocity
+STAP 10, 0       // target reached distance
+
+
+//=== current PID values ===
+STAP 172, 0    	 // P
+STAP 173, 0  	 // I
+
+//=== velocity PID values ===
+STAP 234, 0 	 // P
+STAP 235, 0      // I
+
+//=== position PID values ===
+STAP 230, 0 	 // P
+
+STAP 164, 0      //set activate stop switch
+
+
+WAIT TICKS, 0, 50
+
+// Initialisation of main program
+
+//wait for instruction of calibration start
+waitCalibration:
+    SAP 1, 0, 0          //set actual position
+    GGP 1, 2             // Check value #1 skip calibration if true (10)
+    COMP 10
+    JC EQ, main
+    GGP 2, 2             // Check value #2 start calibration if true (10)
+    COMP 10
+    JC NE, waitCalibration
+    SGP 2, 2, 0          // Do not start calibration (set Value #2 to 0) 0 if false, 10 if true
+    ROR 0, 200           // Start rotation towards lower Limit switch (Avoid stacking of rotation command)
+Calibration:
+    GIO 0, 0             //read IN_0 (lower limit switch)
+    COMP 1
+    JC EQ, Calibration
+    ROR 0, 0             // Avoid stacking of rotation command
+    WAIT TICKS, 0, 200
+    ROR 0, -200          // Start rotation away from lower Limit switch
+    WAIT TICKS, 0, 200
+    ROR 0, 100           // Slow rotation towards lower Limit switch
+PreciseCalib:
+    GIO 0, 0             //read IN_0 (lower limit switch)
+    COMP 1
+    JC EQ, PreciseCalib
+    ROR 0, 0
+    // to do : save current position (change to real value)
+    SAP 1, 0, 100       //set actual position
+    SAP 0, 0, 100       //set target position
+    WAIT TICKS, 0, 200
+    SAP 0, 0, 0          //set target position (move back to initial position)
+    SGP 0, 2, 0          //set target position
+
+
+main: //main
+    GGP 3, 2             // Is trajectory Mode activated?
+    COMP 10
+    JC EQ, TrajectoryGetPos
+SendPosition:
+    GGP 0, 2             //Get user value #0 to register
+    CALCX LOAD           // Load value of accumulator (value #0) to register x
+    CSUB CheckLimitSwitch
+    CALCX SWAP           // Fetch previous stored value #0 in register x
+    AAP 0, 0             // Set target position with register value
+    JA main			   	 //jump to main (main loop)
+
+CheckLimitSwitch:
+    GIO 0, 0             //read IN_0 (lower limit switch)
+    COMP 0
+    JC EQ, DisengageMINUS
+    GIO 1, 0             //read IN_1 (upper limit switch)
+    COMP 0
+    JC EQ, DisengagePLUS
+    RSUB	
+
+DisengageMINUS:          //to do: Change to actual position of lower limit switch
+    CALC LOAD, -100000   // clear the value in accumulator with lower limit
+    CALCX SUB            // Substract the value of register X (target position) with accumulation
+    COMP 0               // Compare the accumulator with the lower limit
+    JC LT, skipMINUS     // Do not disengage if command if greater than lower limit
+    SAP 1, 0, -100000    // set actual position to lower limit
+    SAP 0, 0, -100000    // set target position to lower limit
+    SGP 0, 2, -100000    // set target position to lower limit
+    GGP 0, 2             //Get user value #0 to accumulator
+    CALCX LOAD           // Load value of accumulator (value #0) to register x
+skipMINUS:
+    RSUB
+
+DisengagePLUS:           //to do: Change to actual position of upper limit switch
+    CALC LOAD, 100000    // clear the value in accumulator with upper limit
+    CALCX SUB            // Substract the value of register X (target position) with accumulation
+    COMP 0               // Compare the accumulator with the upper limit
+    JC GT, skipPLUS      // Do not disengage if command if greater than lower limit
+    SAP 1, 0, 100000     //set actual position to upper limit
+    SAP 0, 0, 100000     //set target position to upper limit
+    SGP 0, 2, 100000     //set target position to upper limit
+    GGP 0, 2             //Get user value #0 to accumulator
+    CALCX LOAD           // Load value of accumulator (value #0) to register x
+skipPLUS:
+    RSUB
+
+//Trajectory command mode routine
+TrajectoryGetPos:
+	GGP 6, 2              // Sould you go to next position?  (set Value #2 to 0: false) 0 if false, 10 if true 
+	COMP 10
+    JC EQ, UpdateCurrentPosition
+    GGP 132, 0           // Get tick timer
+    CALCX SWAP           // Put current time in register X
+    GGP 7, 2             // Get Time between positions in ms (values #7)
+    CALCX SUB            // Subtract time between positions with current time
+    COMP 0
+    JC GT, SendPosition
+    SGP 6, 2, 10         // Next loop go next position
+    JA SendPosition
+      
+UpdateCurrentPosition:
+    SGP 6, 2, 0              // Set to 0 : Sould you go to next position? No  (set Value #2 to 0: false) 0 if false, 10 if true   
+    GGP 5, 2                 // Get # of Current position in trajectory reading (value #5)
+    CALC ADD, 1              // Increment # of current position by 1
+    AGP 5, 2                 // Store Value of accumulator to # of current position (value #5)
+    CALCX SWAP               // Store # of current pos in register X
+    GGP 4, 2                 // Total number of positions saved in trajectory (value #4)
+    CALCX SUB                // Substract Current Position from total position
+    COMP -1
+    JC EQ, UpdateTrajectoryState // If we reach end of all trajectories 
+    JA SelectCurrentPosition
+     
+UpdateTrajectoryState:
+    GGP 8, 2                 // Looping mode activated? (set Value #8 to 0: false) 0 if false, 10 if true
+    COMP 10
+    JC EQ, LoopActivated
+    //Disactivate trajectory mode reset parameters to 0
+    SGP 3, 2, 0              // Trajectory mode activated (set Value #3 to 0: false) 0 if false, 10 if true
+    SGP 4, 2, 0              // Number of positions saved in trajectory (value #4)
+    SGP 5, 2, 0              // Current position in trajectory reading  (value #5)
+    SGP 6, 2, 10             // Sould you go to next position?  (set Value #2 to 10: true) 0 if false, 10 if true
+    SGP 7, 2, 0              // Time between positions in ms (values #7)
+    SGP 8, 2, 0              // Looping mode activated (set Value #8 to 0: false) 0 if false, 10 if true
+    JA main                  // Get out of trajectory routine
+LoopActivated:
+    SGP 5, 2, 1              // Current position in trajectory reading set to 1 (value #5)             
+    JA SelectCurrentPosition
+
+SelectCurrentPosition:
+    GGP 5, 2           // Get Current Position
+    COMP 1             // Get value of position according to current position
+    JC EQ, GetPos1     
+    COMP 2
+    JC EQ, GetPos2
+    COMP 3
+    JC EQ, GetPos3
+    COMP 4
+    JC EQ, GetPos4
+    COMP 5
+    JC EQ, GetPos5
+    COMP 6
+    JC EQ, GetPos6
+    COMP 7
+    JC EQ, GetPos7
+    COMP 8
+    JC EQ, GetPos8
+    COMP 9
+    JC EQ, GetPos9
+    COMP 10
+    JC EQ, GetPos10
+    COMP 11
+    JC EQ, GetPos11
+    COMP 12
+    JC EQ, GetPos12
+    COMP 13
+    JC EQ, GetPos13
+    COMP 14
+    JC EQ, GetPos14
+    COMP 15
+    JC EQ, GetPos15
+    COMP 16
+    JC EQ, GetPos16
+    COMP 17
+    JC EQ, GetPos17
+    COMP 18
+    JC EQ, GetPos18
+    COMP 19
+    JC EQ, GetPos19
+    COMP 20
+    JC EQ, GetPos20
+
+GetPos1: 
+	GGP 9, 2   // Recover position 1 (value #9)
+    JA ResetTimer
+
+GetPos2: 
+	GGP 10, 2   // Recover position 2 (value #10)
+    JA ResetTimer
+
+GetPos3: 
+	GGP 11, 2   // Recover position 3 (value #11)
+    JA ResetTimer
+
+GetPos4: 
+	GGP 12, 2   // Recover position 4 (value #12)
+    JA ResetTimer
+
+GetPos5: 
+	GGP 13, 2   // Recover position 5 (value #13)
+    JA ResetTimer
+
+GetPos6: 
+	GGP 14, 2   // Recover position 6 (value #14)
+    JA ResetTimer
+
+GetPos7: 
+	GGP 15, 2   // Recover position 7 (value #15)
+    JA ResetTimer
+
+GetPos8: 
+	GGP 16, 2   // Recover position 8 (value #16)
+    JA ResetTimer
+
+GetPos9: 
+	GGP 17, 2   // Recover position 9 (value #17)
+    JA ResetTimer
+
+GetPos10: 
+	GGP 18, 2   // Recover position 10 (value #18)
+    JA ResetTimer
+
+GetPos11: 
+	GGP 19, 2   // Recover position 11 (value #19)
+    JA ResetTimer
+
+GetPos12: 
+	GGP 20, 2   // Recover position 12 (value #20)
+    JA ResetTimer
+
+GetPos13: 
+	GGP 21, 2   // Recover position 13 (value #21)
+    JA ResetTimer
+
+GetPos14: 
+	GGP 22, 2   // Recover position 14 (value #22)
+    JA ResetTimer
+
+GetPos15: 
+	GGP 23, 2   // Recover position 15 (value #23)
+    JA ResetTimer
+
+GetPos16: 
+	GGP 24, 2   // Recover position 16 (value #24)
+    JA ResetTimer
+
+GetPos17: 
+	GGP 25, 2   // Recover position 17 (value #25)
+    JA ResetTimer
+
+GetPos18: 
+	GGP 26, 2   // Recover position 18 (value #26)
+    JA ResetTimer
+
+GetPos19: 
+	GGP 27, 2   // Recover position 19 (value #27)
+    JA ResetTimer
+
+GetPos20: 
+	GGP 28, 2   // Recover position 20 (value #28)
+    JA ResetTimer
+
+ResetTimer:
+    AGP 0, 2         // Set Value #0 to current position value (buffer for target pos)
+    SGP 132, 0, -1     // Reset tick timer to 0 ms
+    JA sendPosition
+
+   STOP
