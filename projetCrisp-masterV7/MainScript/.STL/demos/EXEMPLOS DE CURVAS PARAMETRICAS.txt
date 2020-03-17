@@ -1,0 +1,42 @@
+CURVAS PARAMÉTRICAS
+>>> ELIPSE
+X = 800
+Y = 0+200*cos(t)*cos(30)-400*sin(t)*sin(30)
+z = 600+200*cos(t)*sin(30)+400*sin(t)*sin(30)
+PARAMETRISED(TIME): 0 TO 2*PI
+
+>>> CURVA DE LISSAJOUS
+X = 600
+Y = 300*cos(t)
+Z = 400*sin(3*t)+700
+time = 
+VELOCIDADE LINEAR CONSTANTE = 200
+
+
+>>> CIRCULO 
+X = 600;
+Y = 500*cos(t) + 100
+Z = 500*sin(t) + 600
+time = 0 a 2*pi
+parametrised(time)
+
+
+
+>>> HIPOTROCOIDE
+R = 630
+r = 280
+d = 140
+X = 700
+Y = (630-280)*cos(t) + 140*cos(((630-280)/280)*t)
+Z = (630-280)*sin(t) - 140*sin(((630-280)/280)*t) + 600
+time = 8*pi
+linear velocity = 200
+
+>>> HELICE
+x = 20*t+500
+y = 0 + 20*t*cos(t)
+z = 700+20*t*sin(t)
+tempo = de 0 a 8*pi
+parametrised(time)
+
+
