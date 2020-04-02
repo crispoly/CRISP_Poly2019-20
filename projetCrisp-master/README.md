@@ -6,3 +6,7 @@ Le code présent permet de contrôler le robot par un interface MATLAB. Celui-ci c
 
 
 Langages: MATLAB-Arduino
+
+Crisp2020-2019: Polytechnique Montréal
+
+William Dumberry. Vincent Dansereau. Mokhtar Dieng. Kevin Ebah.
